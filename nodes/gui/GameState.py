@@ -3,7 +3,7 @@ import os, sys
 from PyQt4 import QtGui, uic, QtCore
 
 import rospy, rostopic
-from playground.msg import GameState as GameStateMsg
+from mcthuggets.msg import GameState as GameStateMsg
 
 from matplotlib import pyplot as plt
 from matplotlib import animation

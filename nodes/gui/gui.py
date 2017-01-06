@@ -4,7 +4,6 @@ from PyQt4 import QtGui, uic, QtCore
 
 import matplotlib
 
-import roslib; roslib.load_manifest('playground')
 import rospy
 
 from Ally import Ally

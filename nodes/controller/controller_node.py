@@ -55,7 +55,7 @@ def main():
     rospy.Subscriber('robot_state', RobotState, _handle_robot_state)
     rospy.Subscriber('desired_position', Pose2D, _handle_desired_position)
     pub = rospy.Publisher('vel_cmds', Twist, queue_size=10)
-    # pub_PIDInfo = rospy.Publisher('pidinfo', PIDInfo, queue_size=10)
+    pub_PIDInfo = rospy.Publisher('pidinfo', PIDInfo, queue_size=10)
 
     # Services
     # rospy.Service('/controller/toggle', Trigger, _toggle)
@@ -83,18 +83,18 @@ def main():
             pub.publish(msg)
 
             # Publish PID Info
-            # msg = PIDInfo()
-            # msg.error.x = Controller.PID_x.error_d1
-            # msg.error.y = Controller.PID_y.error_d1
-            # msg.error.theta = Controller.PID_theta.error_d1
-            # set_point = Controller.get_commanded_position()
-            # msg.desired.x = set_point[0]
-            # msg.desired.y = set_point[1]
-            # msg.desired.theta = set_point[2]
-            # msg.actual.x = _xhat
-            # msg.actual.y = _yhat
-            # msg.actual.theta = _thetahat
-            # pub_PIDInfo.publish(msg)
+            msg = PIDInfo()
+            msg.error.x = Controller.PID_x.error_d1
+            msg.error.y = Controller.PID_y.error_d1
+            msg.error.theta = Controller.PID_theta.error_d1
+            set_point = Controller.get_commanded_position()
+            msg.desired.x = set_point[0]
+            msg.desired.y = set_point[1]
+            msg.desired.theta = set_point[2]
+            msg.actual.x = _xhat
+            msg.actual.y = _yhat
+            msg.actual.theta = _thetahat
+            pub_PIDInfo.publish(msg)
 
 
         rate.sleep()

@@ -5,8 +5,8 @@ from PyQt4 import QtGui, QtCore
 import rospy, rostopic
 from geometry_msgs.msg import Pose2D, Twist
 from std_srvs.srv import Trigger
-from playground.msg import BallState, RobotState, PIDInfo
-from playground.srv import SetBool, SetBoolResponse, RoboClawRPC, RoboClawRPCResponse
+from mcthuggets.msg import BallState, RobotState, PIDInfo
+from mcthuggets.srv import SetBool, SetBoolResponse, RoboClawRPC, RoboClawRPCResponse
 
 import numpy as np
 
@@ -272,7 +272,7 @@ class Ally(object):
         self._step_resp = None
 
         # Figure out my namespace based on who I am
-        ns = '/ally{}'.format(ally)
+        ns = 'ally{}'.format(ally)
         self.ns = ns
 
         # If I am this ally, who is the other ally?

@@ -1,13 +1,12 @@
 #!/usr/bin/env python
 import sys
 
-import roslib; roslib.load_manifest('playground')
 import rospy
 from geometry_msgs.msg import Pose2D
 from std_msgs.msg import Bool
 
-from playground.msg import BallState, RobotState, GameState
-from playground.srv import SetBool, SetBoolResponse
+from mcthuggets.msg import BallState, RobotState, GameState
+from mcthuggets.srv import SetBool, SetBoolResponse
 
 import numpy as np
 
