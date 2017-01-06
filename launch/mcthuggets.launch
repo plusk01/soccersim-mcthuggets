@@ -7,19 +7,15 @@
 
     <group ns="mcthuggets">
 
-        
+
         <param name="simulation_mode" type="bool" value="$(arg sim_mode)" />
         
         <!-- start up ally1 -->
-        <include file="$(find mcthuggets)/launch/ally1.launch">
-
-        </include>
+        <include file="$(find mcthuggets)/launch/ally1.launch" />
 
         <group if="$(arg two_robots)">
             <!-- start up ally2 -->
-            <include file="$(find mcthuggets)/launch/ally2.launch">
-                
-            </include>
+            <include file="$(find mcthuggets)/launch/ally2.launch" />
         </group>
 
     </group>
