@@ -14,12 +14,19 @@ and patch it through as a BallState message.
 """
 
 _state_pub = None
+_we_are_home = True
 
 def _handle_vision_ball_position(msg):
+    # Flip the coordinate system so that our side is always the position
+    # side. This is nice because we won't have to think about this later
+    # in our high-level AI code and elsewhere.
+    # This could also be done in the vision node; see original mcthuggets code
+    flip = 1 if _we_are_home else -1
+
     # Construct ball_state message, BallState
     new_msg = BallState()
-    new_msg.vision_x = new_msg.xhat = new_msg.xhat_future = msg.x
-    new_msg.vision_y = new_msg.yhat = new_msg.yhat_future = msg.y
+    new_msg.vision_x = new_msg.xhat = new_msg.xhat_future = flip*msg.x
+    new_msg.vision_y = new_msg.yhat = new_msg.yhat_future = flip*msg.y
     new_msg.vx = 0
     new_msg.vy = 0
     new_msg.predict_forward_seconds = 0
@@ -28,6 +35,9 @@ def _handle_vision_ball_position(msg):
 
 def main():
     rospy.init_node('ball_estimator', anonymous=False)
+
+    global _we_are_home
+    _we_are_home = rospy.get_param('we_are_home', True)
 
     # Sub/Pub
     global _state_pub
