@@ -3,7 +3,7 @@ import rospy
 from geometry_msgs.msg import Twist, Pose2D
 # from std_srvs.srv import Trigger, TriggerResponse
 
-from soccersim_mcthuggets.msg import PIDInfo, RobotState
+from mcthuggets.msg import PIDInfo, RobotState
 
 import numpy as np
 

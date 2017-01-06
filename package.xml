@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package>
-  <name>soccersim_mcthuggets</name>
+  <name>mcthuggets</name>
   <version>0.0.0</version>
-  <description>The soccersim_mcthuggets package, to be used with soccersim</description>
+  <description>The mcthuggets package, to be used with soccersim</description>
 
   <maintainer email="parkerclusk@gmail.com">Parker Lusk</maintainer>
   <author email="parkerclusk@gmail.com">Parker Lusk</author>
@@ -21,5 +21,15 @@
   <!-- Use test_depend for packages you need only for testing: -->
   <!--   <test_depend>gtest</test_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>message_generation</build_depend>
+  <run_depend>message_runtime</run_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>rospy</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>geometry_msgs</run_depend>
 
 </package>

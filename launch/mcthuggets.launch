@@ -5,17 +5,39 @@
     <arg name="sim_mode" default="false" />
     <arg name="two_robots" default="true" />
 
-    <group ns="mcthuggets">
+    <!-- Input from sim or world -->
+    <!-- <arg name=" <what you call it> " default=" <what we call it> " /> -->
+<!--     <arg name="vision_ally1"        default="vision_home1" />
+    <arg name="vision_ally2"        default="vision_home2" />
+    <arg name="vision_opponent1"    default="vision_away1" />
+    <arg name="vision_opponent2"    default="vision_away2" />
+    <arg name="vision_ball"         default="vision_ball" /> -->
 
+    <!-- Outputs to simulated hardware/world -->
+    <arg name="vel_cmd_ally1" default="vel_cmds" />
+    <arg name="vel_cmd_ally2" default="vel_cmds" />
 
+    <arg name="kick_ally1" default="/ally1/kick" />
+    <arg name="kick_ally2" default="/ally2/kick" />
+
+    <group ns="mcthuggets_$(arg team_side)">
+
+        <!-- Set ROS parameters that the code can access -->
         <param name="simulation_mode" type="bool" value="$(arg sim_mode)" />
         
         <!-- start up ally1 -->
-        <include file="$(find mcthuggets)/launch/ally1.launch" />
+        <include file="$(find mcthuggets)/launch/ally1.launch">
+            <arg name="sim_mode" value="$(arg sim_mode)" />
+            <arg name="team_side" value="$(arg team_side)" />
+        </include>
 
+        <!-- start up ally2 -->
         <group if="$(arg two_robots)">
-            <!-- start up ally2 -->
-            <include file="$(find mcthuggets)/launch/ally2.launch" />
+            <!-- But only if there is an ally2 -->
+            <include file="$(find mcthuggets)/launch/ally2.launch">
+                <arg name="sim_mode" value="$(arg sim_mode)" />
+                <arg name="team_side" value="$(arg team_side)" />
+            </include>
         </group>
 
     </group>
