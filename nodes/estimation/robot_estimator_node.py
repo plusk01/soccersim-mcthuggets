@@ -20,7 +20,7 @@ _state_pub = None
 _we_are_home = True
 
 def _handle_vision_position(msg):
-    # Flip the coordinate system so that our side is always the position
+    # Flip the coordinate system so that our side is always the negative
     # side. This is nice because we won't have to think about this later
     # in our high-level AI code and elsewhere.
     # This could also be done in the vision node; see original mcthuggets code
