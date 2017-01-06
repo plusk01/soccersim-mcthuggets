@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <launch>
 
-    <group ns="/ally2">
+    <group ns="ally2">
 
         <arg name="me" value="ally2" />
         <arg name="ally" value="ally1" />

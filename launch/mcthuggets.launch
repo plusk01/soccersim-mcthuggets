@@ -1,13 +1,26 @@
 <?xml version="1.0"?>
 <launch>
+    <!-- declare arg to be passed in -->
+    <arg name="team_side" default="home" />
+    <arg name="sim_mode" default="false" />
+    <arg name="two_robots" default="true" />
 
-    <!-- am I home or away? -->
+    <group ns="mcthuggets">
 
-    <!-- is this simulation mode or hardware mode? -->
+        
+        <param name="simulation_mode" type="bool" value="$(arg sim_mode)" />
+        
+        <!-- start up ally1 -->
+        <include file="$(find mcthuggets)/launch/ally1.launch">
 
-    <!-- how many robots are there in this team? -->
+        </include>
 
-    <!-- start up ally1 -->
-    <!-- start up ally2 -->
+        <group if="$(arg two_robots)">
+            <!-- start up ally2 -->
+            <include file="$(find mcthuggets)/launch/ally2.launch">
+                
+            </include>
+        </group>
 
+    </group>
 </launch>
