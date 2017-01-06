@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<launch>
+
+    <!-- am I home or away? -->
+
+    <!-- is this simulation mode or hardware mode? -->
+
+    <!-- how many robots are there in this team? -->
+
+    <!-- start up ally1 -->
+    <!-- start up ally2 -->
+
+</launch>
