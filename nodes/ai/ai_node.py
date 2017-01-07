@@ -70,7 +70,8 @@ def main():
 
     # are we home or away?
     global _team_side
-    _team_side = rospy.get_param('team_side', 'home')
+    param_name = rospy.search_param('team_side')
+    _team_side = rospy.get_param(param_name, 'home')
 
     # Create robot objects that store that current robot's state
     _create_robots()
