@@ -57,20 +57,16 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 add_message_files(
   FILES
   GameState.msg
-  EncoderEstimates.msg
-  QPulses.msg
-  WorldVelocities.msg
   BallState.msg
   RobotState.msg
   PIDInfo.msg
 )
 
 ## Generate services in the 'srv' folder
-add_service_files(
-  FILES
-  RoboClawRPC.srv
-  SetBool.srv
-)
+# add_service_files(
+#   FILES
+#   file.srv
+# )
 
 ## Generate actions in the 'action' folder
 # add_action_files(
