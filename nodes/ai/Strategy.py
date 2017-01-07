@@ -1,3 +1,17 @@
+"""
+
+Disclaimer:
+
+The code in here was written in the last few weeks of the semester. as such,
+we decided to be as quick as possible and not use classes, since we wanted
+everyone's help and not everyone knew Python.
+
+I would advise that you use classes. The code in here is sometimes
+scary, and I have a hard time remembering what was what.
+
+But hey, we won. So maybe there's something to be said for it.
+
+"""
 import numpy as np
 
 import Roles
@@ -65,21 +79,23 @@ Notes of things I have changed that may need to be changed back:
 Things I'm currently/need to work on:
     - Using future positions of ball for attack/shooting
     - Collision avoidance with our own robots. Fix am_i_too_close_to_teammate to have robot future positions.
-    - Take that survey for this dumb class
 """
 
 
 
 # ally1 is designated as the "main" attacker, or the robot closest to the opponent's goal at the beginning of the game
 # ally2 is designated as the "main" defender, or the robot closest to our goal at the beginnning of the game
-def choose_strategy(me, my_teammate, opponent1, opponent2, ball, was_goal=G.NO_ONE, one_v_one=False):
+def choose_strategy(me, my_teammate, opponent1, opponent2, ball, game_state, team_side):
     global _avg_dist_between_opponents, _averaging_factor, _percent_time_ball_in_our_half, _percent_time_opponents_in_our_half
     global _our_score, _opponent_score
     update_opponents_strategy_variables(opponent1, opponent2, ball)
     
     # Check to see if someone scored a goal
-    if was_goal is not G.NO_ONE:
-        update_score(was_goal)
+    update_score(game_state, team_side)
+
+    # one_v_one or two_v_two?
+    us_count = getattr(game_state, '{}_bot_count'.format(team_side))
+    one_v_one = us_count == 1
 
     opp_strong_offense = (_percent_time_ball_in_our_half >= 0.50 and _avg_dist_between_opponents <=  1.5 )  
     #for now, we will just focus on aggressive offense
@@ -224,16 +240,27 @@ def check_for_goal(ball):
                 update_score(ball)
 
 
-def update_score(who_scored):
+def update_score(game_state, team_side):
     global _our_score, _opponent_score
-    if who_scored == G.US:
-        print "GOOOOOAAAAAAALLLLLLLAAAAASSSSSSSOOOOOOO!!!!"
-        _our_score = _our_score + 1
-    elif who_scored == G.THEM:
-        print "NOOOO, They scored =("
-        _opponent_score = _opponent_score + 1 
 
-    print("Score is now:\n\tUs: {} \n\tThem: {}".format(_our_score, _opponent_score))
+    # Break out the scores from the message
+    us_score = getattr(game_state, '{}_score'.format(team_side))
+    other_team_side = 'away' if team_side == 'home' else 'home'
+    them_score = getattr(game_state, '{}_score'.format(other_team_side))
+
+    goal = False
+
+    if us_score > _our_score:
+        print "GOOOOOAAAAAAALLLLLLLAAAAASSSSSSSOOOOOOO!!!!"
+        _our_score = us_score
+        goal = True
+    elif them_score > _opponent_score:
+        print "NOOOO, They scored =("
+        _opponent_score = them_score
+        goal = True
+
+    if goal:
+        print("Score is now:\n\tUs: {} \n\tThem: {}".format(_our_score, _opponent_score))
 
 
 def update_opponents_strategy_variables(opponent1, opponent2, ball):

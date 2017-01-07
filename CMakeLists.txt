@@ -12,6 +12,9 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   message_generation
   std_srvs
+  
+  # Since we need the GameState.msg file from soccerref, we have to add it here
+  soccerref
 )
 
 ## System dependencies are found with CMake's conventions
@@ -56,7 +59,6 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 ## Generate messages in the 'msg' folder
 add_message_files(
   FILES
-  GameState.msg
   BallState.msg
   RobotState.msg
   PIDInfo.msg
@@ -114,7 +116,7 @@ generate_messages(
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES mcthuggets
- CATKIN_DEPENDS roscpp rospy std_msgs geometry_msgs message_runtime std_srvs
+ CATKIN_DEPENDS roscpp rospy std_msgs geometry_msgs message_runtime std_srvs soccerref
 #  DEPENDS system_lib
 )
 

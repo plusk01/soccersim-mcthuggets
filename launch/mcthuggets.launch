@@ -2,7 +2,7 @@
 <launch>
     <!-- declare arg to be passed in -->
     <arg name="team_side" default="home" />
-    <arg name="sim_mode" default="false" />
+    <arg name="sim_mode" default="true" />
     <arg name="two_robots" default="true" />
 
     <!-- Outputs to either real world or simulation -->
@@ -16,6 +16,7 @@
         <!-- Set ROS parameters that the code can access -->
         <param name="simulation_mode" type="bool" value="$(arg sim_mode)" />
         <param name="we_are_home" type="bool" value="$(eval team_side == 'home')" />
+        <param name="team_side" type="string" value="$(arg team_side)" />
         
         <!-- start up ally1 -->
         <include file="$(find mcthuggets)/launch/ally1.launch">

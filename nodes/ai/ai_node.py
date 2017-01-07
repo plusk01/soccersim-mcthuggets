@@ -5,8 +5,7 @@ import rospy
 from geometry_msgs.msg import Pose2D
 from std_msgs.msg import Bool
 
-from mcthuggets.msg import BallState, RobotState, GameState
-from mcthuggets.srv import SetBool, SetBoolResponse
+from mcthuggets.msg import BallState, RobotState
 
 import numpy as np
 
@@ -20,13 +19,12 @@ _opp2 = None
 
 _ball = None
 
-_game_state = {
-    'play': False,
-    'two_v_two': False,
-    'us_goal': False,
-    'them_goal': False,
-    'first_time': True
-}
+_team_side = None
+
+# We have a dependency on the soccerref package. This
+# GameState message comes from the referee.
+from soccerref.msg import GameState
+_game_state = GameState()
 
 def _handle_robot_state(msg, which_robot):
     # Update the given robot's current and future positions
@@ -43,21 +41,9 @@ def _handle_ball_state(msg):
     _ball.update_state(msg)
 
 def _handle_game_state(msg):
-    global _game_state, _ally
+    global _game_state
 
-    _game_state['play'] = msg.play
-    _game_state['two_v_two'] = msg.two_v_two
-    _game_state['us_goal'] = msg.usgoal
-    _game_state['them_goal'] = msg.themgoal
-
-    # Since we've gotten our first state message with msg.play 'True',
-    # 'first_time' is False. This means that the robots will hold
-    # their place from now on.
-    if _game_state['first_time'] and msg.play:
-        _game_state['first_time'] = False
-
-    if not msg.two_v_two:
-         _ally = None
+    _game_state = msg
 
 def _create_robots():
     """Create Robots
@@ -82,6 +68,10 @@ def _create_robots():
 def main():
     rospy.init_node('ai', anonymous=False)
 
+    # are we home or away?
+    global _team_side
+    _team_side = rospy.get_param('team_side', 'home')
+
     # Create robot objects that store that current robot's state
     _create_robots()
  
@@ -104,33 +94,13 @@ def main():
     rate = rospy.Rate(100) #100 Hz
     while not rospy.is_shutdown():
 
-        # Was there a goal to tell Strategy about?
-        if _game_state['us_goal']:
-            goal = Strategy.G.US
-            _game_state['us_goal'] = False
-
-        elif _game_state['them_goal']:
-            goal = Strategy.G.THEM
-            _game_state['them_goal'] = False
-
-        else:
-            goal = Strategy.G.NO_ONE
-
-        # We didn't name this well ha. So 'not' it
-        one_v_one = not _game_state['two_v_two']
-
-        (x_c, y_c, theta_c) = Strategy.choose_strategy(_me, _ally, _opp1, _opp2, _ball, \
-                                        was_goal=goal, one_v_one=one_v_one)
+        (x_c, y_c, theta_c) = Strategy.choose_strategy(_me, _ally, _opp1, _opp2, \
+                                     _ball, _game_state, _team_side)
 
         # Get a message ready to send
-        msg = Pose2D()
+        msg = Pose2D()           
 
-        if _game_state['play']:
-            # Run AI as normal
-            msg.x = x_c
-            msg.y = y_c
-            msg.theta = theta_c
-        else:
+        if _game_state.reset_field:
             # Send robot to home
             if _me.ally1:
                 msg.x = Constants.ally1_start_pos[0]
@@ -140,10 +110,16 @@ def main():
                 msg.x = Constants.ally2_start_pos[0]
                 msg.y = Constants.ally2_start_pos[1]
                 msg.theta = Constants.ally2_start_pos[2]
+        else:
+            # Run AI as normal
+            msg.x = x_c
+            msg.y = y_c
+            msg.theta = theta_c
 
-        # If it's not the first time, the robot will 'hold its ground'
-        # even while paused. (See guidedog_node.py)
-        if not _game_state['first_time']:
+
+        # If we shouldn't play and the field doesn't need to be
+        # reset, then the AI node is out of a job.
+        if _game_state.play or _game_state.reset_field:
             pub.publish(msg)
 
         rate.sleep()
