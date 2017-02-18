@@ -2,6 +2,7 @@
 <launch>
     <!-- declare arg to be passed in -->
     <arg name="sim_mode" default="false" />
+    <arg name="competition_mode" default="false" />
     <arg name="team_side" default="home" />
     <arg name="vel_cmds_remap" default="vel_cmds" />
 
@@ -18,6 +19,7 @@
             <arg name="me" value="ally2" />
             <arg name="ally" value="ally1" />
             <arg name="sim_mode" value="$(arg sim_mode)" />
+            <arg name="competition_mode" value="$(arg competition_mode)" />
             <arg name="team_side" value="$(arg team_side)" />
             <arg name="vel_cmds_remap" value="$(arg vel_cmds_remap)" />
         </include>

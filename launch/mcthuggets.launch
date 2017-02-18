@@ -3,6 +3,7 @@
     <!-- declare arg to be passed in -->
     <arg name="team_side" default="home" />
     <arg name="sim_mode" default="true" />
+    <arg name="competition_mode" default="false" />
     <arg name="two_robots" default="true" />
 
     <!-- Outputs to either real world or simulation -->
@@ -20,6 +21,7 @@
         <!-- start up ally1 -->
         <include file="$(find mcthuggets)/launch/ally1.launch">
             <arg name="sim_mode" value="$(arg sim_mode)" />
+            <arg name="competition_mode" value="$(arg competition_mode)" />
             <arg name="team_side" value="$(arg team_side)" />
             <arg name="vel_cmds_remap" value="$(arg vel_cmd_ally1)" />
         </include>
@@ -29,6 +31,7 @@
             <!-- But only if there is an ally2 -->
             <include file="$(find mcthuggets)/launch/ally2.launch">
                 <arg name="sim_mode" value="$(arg sim_mode)" />
+                <arg name="competition_mode" value="$(arg competition_mode)" />
                 <arg name="team_side" value="$(arg team_side)" />
                 <arg name="vel_cmds_remap" value="$(arg vel_cmd_ally2)" />
             </include>

@@ -53,7 +53,7 @@ def main():
     _state_pub = rospy.Publisher('ball_state', BallState, queue_size=10)
     
     rospy.Subscriber('vision_position', Pose2D, _handle_vision_ball_position)
-    rospy.Subscriber('/game_state', GameState, _handle_game_state)
+    rospy.Subscriber('game_state', GameState, _handle_game_state)
     
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()

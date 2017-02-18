@@ -88,7 +88,7 @@ def main():
     rospy.Subscriber('ball_state', BallState, _handle_ball_state)
 
     # This message will tell us if we are to be playing or not right now
-    rospy.Subscriber('/game_state', GameState, _handle_game_state)
+    rospy.Subscriber('game_state', GameState, _handle_game_state)
 
     pub = rospy.Publisher('desired_position', Pose2D, queue_size=10)
 

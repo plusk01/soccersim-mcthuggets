@@ -4,6 +4,7 @@
     <arg name="me" default="ally1" />
     <arg name="ally" default="ally2" />
     <arg name="sim_mode" default="false" />
+    <arg name="competition_mode" default="false" />
     <arg name="team_side" default="home" />
     <arg name="vel_cmds_remap" default="vel_cmds" />
 
@@ -11,28 +12,38 @@
     <!-- connections to the output of the vision system -->
     <arg name="other_side" value="away" if="$(eval team_side == 'home')" />
     <arg name="other_side" value="home" if="$(eval team_side == 'away')" />
+
+    <!-- Decide what namespace game_state is in -->
+    <arg name="game_state_topic" value="/game_state" if="$(eval sim_mode or competition_mode)" />
+    <arg name="game_state_topic" value="/mcthuggets_testing/game_state" unless="$(eval sim_mode or competition_mode)" />
     
     <!-- Hardware agnostic code -->
     <node name="ball_estimator" pkg="mcthuggets" type="ball_estimator_node.py" output="screen">
+        <remap from="game_state" to="$(arg game_state_topic)" />
         <remap from="vision_position" to="/vision/ball" />
     </node>
     <node name="ally1_estimator" pkg="mcthuggets" type="robot_estimator_node.py">
+        <remap from="game_state" to="$(arg game_state_topic)" />
         <remap from="vision_position" to="/vision/$(arg team_side)1" />
         <remap from="robot_state" to="ally1_state" />
     </node>
     <node name="ally2_estimator" pkg="mcthuggets" type="robot_estimator_node.py">
+        <remap from="game_state" to="$(arg game_state_topic)" />
         <remap from="vision_position" to="/vision/$(arg team_side)2" />
         <remap from="robot_state" to="ally2_state" />
     </node>
     <node name="opponent1_estimator" pkg="mcthuggets" type="robot_estimator_node.py">
+        <remap from="game_state" to="$(arg game_state_topic)" />
         <remap from="vision_position" to="/vision/$(arg other_side)1" />
         <remap from="robot_state" to="opponent1_state" />
     </node>
     <node name="opponent2_estimator" pkg="mcthuggets" type="robot_estimator_node.py">
+        <remap from="game_state" to="$(arg game_state_topic)" />
         <remap from="vision_position" to="/vision/$(arg other_side)2" />
         <remap from="robot_state" to="opponent2_state" />
     </node>
     <node name="ai" pkg="mcthuggets" type="ai_node.py" output="screen">
+        <remap from="game_state" to="$(arg game_state_topic)" />
         <remap from="my_state" to="$(arg me)_state" />
         <remap from="ally_state" to="$(arg ally)_state" />
     </node>
